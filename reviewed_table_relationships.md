@@ -64,3 +64,12 @@ Body_battery_sample has 315,848 rows across 708 periods/seven participants, with
 
 Derived sample periods ↔ aggregated body_battery_activity_events: 178 exact participant/date/start/end matches, 530 sample-only periods, no event-only periods. All matched record IDs/groups/durations agree, with unique/non-null period keys and explicit one-to-one validation after event aggregation. The 448 events cover two participants, both among the sample table's seven. Missing event-table matches do not mean zero events or inactivity. Sample date coverage is 93.10%–100% within observed spans, not enrolment or wear coverage. No event-effect, clinical or causal inference is made.
 
+
+## body_battery_activity_events review
+
+Body_battery_activity_events has 448 events across 178 periods/two participants, with no null cells, exact duplicate rows or tested event-identity/start collisions. Labels are SLEEP 177, ACTIVITY 172, RECOVERY 81, NAP 17, STRESS 1. Source event/impact definitions remain unverified.
+
+All 178 derived event periods match body_battery_sample aggregates on participant/date/start/end; 530 sample-only periods remain and both event users are among the sample table's seven. Period keys are unique/non-null after aggregation, one-to-one joins are enforced and matched record IDs/groups/durations agree. Raw event×sample joins are avoided.
+
+Under a declared half-open diagnostic, 122 events extend outside reporting bounds and 171 cross UTC dates. Raw lengths sum to 5,699,100 seconds; clipping yields summed lengths 5,365,033 and summed per-period union 5,362,633, with 2,400 overlap-excess seconds in one period. These are diagnostic quantities, not official totals or complete wear time; one reporting-window overlap remains a cross-period risk. Impacts span −22 to 79 (181 negative, 29 zero, 238 positive), without assumed sign meaning/additivity or proportional allocation on clipping. No medical, causal or event-effect inference follows.
+
