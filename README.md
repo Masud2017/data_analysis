@@ -18,6 +18,8 @@ This README brings together the verified findings, methods and data-handling dec
 
 **A sentence for the teacher:** “I established the meaning of a row, checked data quality and recording coverage, and validated period keys before comparing tables. The EDA identifies useful descriptive patterns and unresolved source questions; it does not prove why patterns occurred or validate a future model.”
 
+This README embeds **six selected, non-identifying figures** from the executed analyses. Some figures contain multiple panels. The final six notebooks produced 12 inspected figures, and heart-rate samples produced three; the full figure sets remain in the executed artifacts. Only this selection is published under `docs/assets/`, without participant identifiers or raw sample traces. Captions state the relevant denominators and limits.
+
 ## 2. Scope, evidence and what was actually changed
 
 ### Completed
@@ -183,6 +185,10 @@ Evidence: [goals_analysis.ipynb](goals_analysis.ipynb).
 - Floors achievement uses positive targets and nonmissing/nonnegative floors, retaining the 76 measured zeros: **98/429 eligible records (22.84%)**. **558** missing-floor records are excluded. Exactly-24-hour sensitivity: **98/427 (22.95%)**, with 543 excluded from 970 matched 24-hour records. The rate cannot describe the records with missing floors.
 - Week labels differ from the ISO calendar-date diagnostic in **one week-number record** and **nine weekday records**. The labels were not overwritten; source convention needs confirmation.
 
+![Floors goal achievement with eligible, below-goal and excluded record counts](docs/assets/floors-goal-denominator.png)
+
+**Figure 1 — The denominator changes the interpretation.** Of 987 matched periods, 429 have a positive floors goal and a nonmissing, nonnegative floor count: 98 meet the goal and 331 fall below it. The other 558 records have missing floors and are excluded, not counted as zero or failures. The 22.84% achievement rate applies to eligible recorded periods, not all days or people.
+
 ### 6.4 Kilocalories
 
 Evidence: [kilocalories_analysis.ipynb](kilocalories_analysis.ipynb).
@@ -254,6 +260,10 @@ Evidence: [heart_rate_sample_analysis.ipynb](heart_rate_sample_analysis.ipynb).
 - Sample min/max exactly match **960/960** paired summaries. All-numeric and positive-only calculations are identical because every sample is positive. Means: **5/960 exactly equal**, **747/960 within 0.5**, **822/960 within one recorded unit**; **138** differ by more than one. Median signed sample-minus-summary difference **−0.127**, median absolute **0.320**, maximum absolute **18.458**. Rounding, weighting, filtering and averaging windows remain unknown. Resting HR is not reconstructed.
 - The frequency plot uses SQL bins bounded to 1,500; it was **not truncated** in this run. Raw sample rows were not loaded into pandas. All sample/summary checks used one read-only repeatable-read snapshot.
 
+![Period-aggregate heart-rate sample means versus summary averages and their difference distribution](docs/assets/heart-rate-sample-summary-means.png)
+
+**Figure 2 — A sample mean is not automatically the summary average.** These are 960 complete, context-agreeing matched periods, not raw sample traces. The diagonal denotes equality; 138 row-weighted sample means differ from the source average by more than one recorded unit (maximum absolute difference 18.458). Units, filtering, rounding and averaging rules remain unverified; the plot is not sensor or model validation.
+
 ### 6.8 Stress-level samples
 
 Evidence: [stress_level_sample_analysis.ipynb](stress_level_sample_analysis.ipynb).
@@ -266,6 +276,10 @@ Evidence: [stress_level_sample_analysis.ipynb](stress_level_sample_analysis.ipyn
 - All-value sample maxima versus nonnegative summary maxima: **90/951 exact**, **223/951 within one unit**, median absolute difference **4**, maximum **62**. Nonnegative-sample maxima have **948 complete pairs**, also 90 exact/223 within one; three matched periods have no eligible nonnegative sample maximum.
 - All-sample means versus nonnegative reported averages: **951 complete pairs**, zero exact, **10 within one unit**, median absolute difference **8.146**, maximum **82.656**. Nonnegative means: **948 pairs**, **2 exact**, **857 within one unit**, median absolute difference **0.383**, maximum **17.211**.
 - Timestamp-collapsed, non-conflicting nonnegative sensitivity: same 948 pairs, two exact/857 within one, median absolute difference **0.384**, maximum **17.211**. Duplicate weighting changes a period's nonnegative mean by at most **0.633** here. A closer result after filtering does not prove sentinel meanings or reproduce a verified source algorithm.
+
+![Aggregate frequency of all recorded stress sample values, including negative codes](docs/assets/stress-sample-value-frequency.png)
+
+**Figure 3 — Non-null does not mean valid.** The frequency distribution includes all 460,975 recorded stress samples, including 147,538 negative values (−1 or −2). Their meanings are unknown, so the spikes are reported rather than labelled as a particular physiological state. Counts are sample-weighted and include the separately documented duplicate/export risks.
 
 ### 6.9 Body-battery samples
 
@@ -289,6 +303,10 @@ Evidence: [body_battery_activity_events_analysis.ipynb](body_battery_activity_ev
 - Reporting windows: **177 exactly 24 hours**, one other duration; one reporting-window overlap. Date coverage **98.25%–100%** within spans, 56–122 observed dates per participant.
 - Impact values: **181 negative, 29 zero, 238 positive**, range **−22–79**, no missing values. No recharge/drain, additivity, proportional allocation on clipping or causal score-change interpretation is assumed. Impact/length plots are descriptive.
 - All 178 event periods match sample aggregates, with 530 sample-only periods and agreeing context. The narrow two-participant event export is not generalized to the seven-participant sample cohort.
+
+![Aggregate body-battery event label counts and valid interval-length distribution](docs/assets/body-battery-event-labels-and-lengths.png)
+
+**Figure 4 — Events have their own grain and narrow coverage.** The 448 intervals cover only two participants and 178 reporting periods. The label and length distributions are descriptive source records; labels are not independently verified classifications. In this same dataset, 122 intervals extend outside their assigned reporting bounds and 171 cross UTC dates. These distributions do not establish complete coverage, impact meaning or a causal event effect.
 
 ### 6.11 Overall sleep
 
@@ -320,6 +338,10 @@ Evidence: [sleep_analysis.ipynb](sleep_analysis.ipynb).
 - Period checks and coverage match the overall-sleep findings: 293 exactly-24-hour windows, six other durations, no overlaps, 78.57%–99.18% observed-span coverage. All 299 match overall_sleep and event aggregates with agreeing context; events have 498 additional periods/eight rather than five participants.
 - **Future category encoding cannot restore numeric hours or percentages.** One-hot encoding can represent category membership; a chosen ordinal code would impose an ordering/distance assumption. Either requires a defined future model/target and confirmed semantics. Encoding is deferred, not treated as completed cleaning.
 
+![Stacked category frequencies for seven sleep component rating fields](docs/assets/sleep-component-label-frequencies.png)
+
+**Figure 5 — These are ratings, not hours or percentages.** Each bar represents 299 records across five participants. Every component field contains text categories; none is numeric-parseable. The same two records contain INVALID in the rem/light/deep rating fields. Category encoding would represent labels, not recover numeric sleep duration or stage percentages.
+
 ### 6.13 Sleep-level events
 
 Evidence: [sleep_level_events_analysis.ipynb](sleep_level_events_analysis.ipynb).
@@ -331,6 +353,10 @@ Evidence: [sleep_level_events_analysis.ipynb](sleep_level_events_analysis.ipynb)
 - The unions include **awake**. They are **not official asleep duration**, complete-night coverage or a substitute for the categorical component fields. No event is silently deleted because it crosses midnight or its assigned reporting bound.
 - **787 windows exactly 24 hours**, ten other durations; no reporting-window overlap; all durations equal end minus start. Observed dates **11–240**, coverage **58.8%–99.18%** inside individual spans.
 - Each summary table matches **299 periods**, with **498 event-only periods** and no summary-only periods; all five summary participants occur among eight event participants. Context agrees after period aggregation; no raw interval join multiplies summaries.
+
+![Distribution of clipped interval-union hours per sleep-event reporting period](docs/assets/sleep-event-clipped-union-hours.png)
+
+**Figure 6 — An interval union is a diagnostic quantity.** The 797 event reporting periods cover eight participants. The plotted union clips intervals to each reporting window under the declared half-open convention and counts overlapping time once. Labels include awake, 1,864 intervals extend outside their reporting bounds, and source night/window semantics remain unknown. These values are not official asleep duration or wear time; the 299 sleep summaries cover only a subset of these periods.
 
 ## 7. Time, cadence, overlap and coverage: reconciled interpretation
 
