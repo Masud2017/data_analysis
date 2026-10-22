@@ -118,6 +118,50 @@ Each notebook states its own exclusions. Record-weighted rates/means and a distr
 
 ## 5. Validated relationships and unmatched periods
 
+The diagram groups all 13 source tables by their observed grain. The candidate analysis key **K** is `(sdv_user_id, calendar_date, start_measure_period_sec, end_measure_period_sec)`. It is an analysis matching key; no enforced database primary-key or foreign-key constraints are claimed.
+
+```mermaid
+flowchart TB
+  subgraph samples["Timestamp samples: raw rows to analysis-only period aggregates"]
+    hr_sample["heart_rate_sample"] -->|"many rows to 1 observed K"| hr_periods("HR sample periods<br/>960")
+    stress_sample["stress_level_sample"] -->|"many rows to 1 observed K"| stress_periods("Stress sample periods<br/>981")
+    battery_sample["body_battery_sample"] -->|"many rows to 1 observed K"| battery_periods("Battery sample periods<br/>708")
+  end
+
+  subgraph events["Interval events: raw rows to analysis-only period aggregates"]
+    battery_events["body_battery_activity_events"] -->|"many rows to 1 observed K"| battery_event_periods("Battery event periods<br/>178")
+    sleep_events["sleep_level_events"] -->|"many rows to 1 observed K"| sleep_event_periods("Sleep event periods<br/>797")
+  end
+
+  subgraph summaries["Period summaries: candidate K checked per table"]
+    goals["goals"] ---|"987 matched"| steps["steps"]
+    steps ---|"987 matched"| kilocalories["kilocalories"]
+    kilocalories ---|"987 matched"| activity["activity"]
+    activity ---|"987 matched"| stress["stress"]
+    activity ---|"961 matched<br/>26 activity-only"| hr_values["heart_rate_values"]
+    overall_sleep["overall_sleep"] ---|"299 matched<br/>no unmatched"| sleep["sleep"]
+  end
+
+  hr_periods ---|"960 matched<br/>1 summary-only"| hr_values
+  stress_periods ---|"978 matched<br/>3 sample-only; 9 summary-only"| stress
+  battery_periods ---|"178 matched<br/>530 sample-only; 0 event-only"| battery_event_periods
+  sleep_event_periods ---|"299 matched<br/>498 event-only; 0 summary-only"| overall_sleep
+
+  classDef sample fill:#e8f5ee,stroke:#29704c,color:#172b22
+  classDef event fill:#fff2dc,stroke:#92651e,color:#332611
+  classDef summary fill:#eaf0ff,stroke:#4467a0,color:#182842
+  classDef derived fill:#ffffff,stroke:#666666,stroke-dasharray:5 3,color:#222222
+  class hr_sample,stress_sample,battery_sample sample
+  class battery_events,sleep_events event
+  class activity,steps,goals,kilocalories,stress,hr_values,overall_sleep,sleep summary
+  class hr_periods,stress_periods,battery_periods,battery_event_periods,sleep_event_periods derived
+```
+
+**Legend:** colored rectangular nodes are source tables; dashed rounded nodes are analysis-only aggregates, with their observed period counts. Arrows aggregate many raw rows to one observed K before matching. Undirected lines show selected directly verified exact-K comparisons, not foreign keys or causal relationships. Unmatched counts are retained; sample/event coverage does not guarantee a corresponding summary. The complete comparison matrix follows below. The 987-match summary comparisons have no unmatched periods; the HR sample comparison has no sample-only periods. Aggregation does not imply cross-period deduplication or imputation. Period bounds remain part of K because reporting periods may overlap or cross midnight.
+
+[Standalone Mermaid source](docs/data_relationships.mmd).
+
+
 Every row below refers to a directly executed comparison. “A-only” and “B-only” keep the stated orientation. Sample/event rows are aggregated to period grain before these joins; the one-to-one statement does **not** apply to their raw rows.
 
 | A | B | Matched periods | A-only | B-only | Additional evidence |
