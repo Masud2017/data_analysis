@@ -57,3 +57,10 @@ Derived sample periods ↔ stress summaries: 978 exact participant/date/start/en
 
 Within-record observed mode/median/p90/p99 are 180 seconds, but 29 gaps exceed one hour. Four reporting-window overlaps and 19 non-24-hour windows occur; record-boundary gaps are separated from internal cadence. Date coverage within observed participant spans is 89.36%–100%, not wear time. Score/sentinel meanings, cadence, summary weighting, timezone and endpoints remain unresolved; no clinical or causal conclusion follows.
 
+
+## body_battery_sample review
+
+Body_battery_sample has 315,848 rows across 708 periods/seven participants, with no null/nonpositive scores, exact duplicates or within-period timestamp collisions. Recorded scores range 5–100; source interpretation remains unverified. Ninety-one participant/timestamps repeat across periods without conflicting values. There are two overlapping reporting windows, 695 exactly-24-hour periods and 13 other-duration periods. Observed internal mode/median/p90/p99 are 180 seconds, but 82 gaps exceed one hour; cadence and wear semantics remain unverified.
+
+Derived sample periods ↔ aggregated body_battery_activity_events: 178 exact participant/date/start/end matches, 530 sample-only periods, no event-only periods. All matched record IDs/groups/durations agree, with unique/non-null period keys and explicit one-to-one validation after event aggregation. The 448 events cover two participants, both among the sample table's seven. Missing event-table matches do not mean zero events or inactivity. Sample date coverage is 93.10%–100% within observed spans, not enrolment or wear coverage. No event-effect, clinical or causal inference is made.
+
