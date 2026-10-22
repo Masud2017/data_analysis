@@ -80,3 +80,10 @@ Overall_sleep contains 299 records/five participants; tested keys are unique/non
 
 Overall_sleep ↔ sleep: 299 exact participant/date/start/end one-to-one matches, no unmatched periods; all compared record IDs/groups/durations agree, with the same five participants. Overall_sleep ↔ aggregated sleep_level_events: 299 matches, no summary-only periods, 498 event-only periods. Events have 18,402 rows across 797 periods/eight participants; all five summary users occur among those eight. Matched context agrees. Missing summaries are not zero scores/no sleep; event intervals are aggregated before joining to prevent multiplication. Source score, qualifier, period/night and timezone meanings remain unresolved.
 
+
+## sleep review
+
+Sleep has 299 records/five participants with unique/non-null tested keys, no null cells and no exact duplicates. All seven component fields (total_duration, stress, awake, remperc, restless, lightperc, deepperc) are categorical text: zero numeric-parseable values in every field. They are not numeric hours/percentages. Two records have INVALID in remperc/lightperc/deepperc; labels remain explicit, without invented ordinal encoding, recoding or clinical meaning.
+
+Sleep ↔ overall_sleep: 299 exact participant/date/start/end one-to-one matches, no unmatched periods; all compared IDs/groups/durations agree. Sleep ↔ aggregated sleep_level_events: 299 matches, no summary-only periods and 498 event-only periods, with agreeing context in matches. Summary users number five versus eight event users; all five are shared. Events are aggregated to 797 period rows before joining. No missing summary becomes zero sleep or an inferred stage percentage. Reporting periods, observed-span coverage and source score/label/night/timezone meanings retain the limitations documented in overall_sleep; no numeric duration or stage-percent arithmetic is applied to text fields.
+
