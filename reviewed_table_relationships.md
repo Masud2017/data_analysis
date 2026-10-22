@@ -73,3 +73,10 @@ All 178 derived event periods match body_battery_sample aggregates on participan
 
 Under a declared half-open diagnostic, 122 events extend outside reporting bounds and 171 cross UTC dates. Raw lengths sum to 5,699,100 seconds; clipping yields summed lengths 5,365,033 and summed per-period union 5,362,633, with 2,400 overlap-excess seconds in one period. These are diagnostic quantities, not official totals or complete wear time; one reporting-window overlap remains a cross-period risk. Impacts span −22 to 79 (181 negative, 29 zero, 238 positive), without assumed sign meaning/additivity or proportional allocation on clipping. No medical, causal or event-effect inference follows.
 
+
+## overall_sleep review
+
+Overall_sleep contains 299 records/five participants; tested keys are unique/non-null, with no null cells or exact duplicates. Recorded scores range 26–98 (median 76), without zero/negative values; source scale/algorithm remain unverified. Qualifiers are FAIR 126, GOOD 92, POOR 60, EXCELLENT 21, not clinical thresholds defined here. There are 293 exactly-24-hour windows and six other-duration windows, no window overlaps, and all reported durations equal end minus start. Observed-date coverage is 78.57%–99.18% within individual first-to-last spans, not enrolment/wear coverage.
+
+Overall_sleep ↔ sleep: 299 exact participant/date/start/end one-to-one matches, no unmatched periods; all compared record IDs/groups/durations agree, with the same five participants. Overall_sleep ↔ aggregated sleep_level_events: 299 matches, no summary-only periods, 498 event-only periods. Events have 18,402 rows across 797 periods/eight participants; all five summary users occur among those eight. Matched context agrees. Missing summaries are not zero scores/no sleep; event intervals are aggregated before joining to prevent multiplication. Source score, qualifier, period/night and timezone meanings remain unresolved.
+
