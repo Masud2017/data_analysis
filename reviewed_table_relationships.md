@@ -1,4 +1,4 @@
-# Verified relationships: reviewed summary tables
+# Verified relationships: all 13 reviewed tables
 
 Snapshot checks performed October 22, 2026. Counts describe this dataset, not a source guarantee. Keys and matches are rechecked in each notebook; independently loaded snapshots are not a transactional cross-table guarantee.
 
@@ -73,6 +73,8 @@ All 178 derived event periods match body_battery_sample aggregates on participan
 
 Under a declared half-open diagnostic, 122 events extend outside reporting bounds and 171 cross UTC dates. Raw lengths sum to 5,699,100 seconds; clipping yields summed lengths 5,365,033 and summed per-period union 5,362,633, with 2,400 overlap-excess seconds in one period. These are diagnostic quantities, not official totals or complete wear time; one reporting-window overlap remains a cross-period risk. Impacts span −22 to 79 (181 negative, 29 zero, 238 positive), without assumed sign meaning/additivity or proportional allocation on clipping. No medical, causal or event-effect inference follows.
 
+A separate sweep of raw event intervals across all exports finds one row overlapping a prior same-period interval, no cross-period event overlap, and a global raw union of 5,696,700 seconds (2,400 below raw summed lengths). Thus clipping is not the only overlap check; reporting-window alignment/source semantics still require clarification.
+
 
 ## overall_sleep review
 
@@ -86,4 +88,13 @@ Overall_sleep ↔ sleep: 299 exact participant/date/start/end one-to-one matches
 Sleep has 299 records/five participants with unique/non-null tested keys, no null cells and no exact duplicates. All seven component fields (total_duration, stress, awake, remperc, restless, lightperc, deepperc) are categorical text: zero numeric-parseable values in every field. They are not numeric hours/percentages. Two records have INVALID in remperc/lightperc/deepperc; labels remain explicit, without invented ordinal encoding, recoding or clinical meaning.
 
 Sleep ↔ overall_sleep: 299 exact participant/date/start/end one-to-one matches, no unmatched periods; all compared IDs/groups/durations agree. Sleep ↔ aggregated sleep_level_events: 299 matches, no summary-only periods and 498 event-only periods, with agreeing context in matches. Summary users number five versus eight event users; all five are shared. Events are aggregated to 797 period rows before joining. No missing summary becomes zero sleep or an inferred stage percentage. Reporting periods, observed-span coverage and source score/label/night/timezone meanings retain the limitations documented in overall_sleep; no numeric duration or stage-percent arithmetic is applied to text fields.
+
+
+## sleep_level_events review
+
+Sleep_level_events contains 18,402 intervals across 797 periods/eight participants, with no null cells, exact duplicates, nonpositive durations or tested event-identity/start collisions. Labels are light 8,767, rem 4,978, awake 2,593 and deep 2,064; algorithms/meaning remain source-dependent.
+
+Under a declared half-open diagnostic, 1,864 intervals extend outside reporting windows and 729 cross UTC dates. Raw valid interval seconds sum to 23,189,062; clipped summed/union seconds are both 21,511,167, with no within-period clipped overlap. A separate raw-interval sweep finds no within- or cross-period overlap, and no identical interval/label spans periods. Totals include awake and are not official asleep duration or wear time. There are 787 exactly-24-hour windows, ten other-duration windows and no reporting-window overlap. Observed-date coverage is 58.8%–99.18% within participant spans, excluding unknown enrolment boundaries.
+
+Aggregated event periods ↔ overall_sleep and sleep: 299 exact participant/date/start/end matches to each, 498 event-only periods and no summary-only periods. One-to-one joins are enforced after aggregation; IDs/groups/durations agree in all matches. All five summary participants belong to the eight event participants. Missing summaries are not zero sleep; categorical summary fields are not numeric durations/percentages. Source labels, window/date assignment, timezone, endpoints, score algorithms and actual wear remain unresolved.
 
